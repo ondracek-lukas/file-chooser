@@ -1,0 +1,12 @@
+#!/bin/bash
+# Copyright (C) 2017  Lukáš Ondráček <ondracek.lukas@gmail.com>, to be used under GNU GPLv3
+
+# This file is a wrapper for perl6 script FileChooser;
+# it runs the script as module causing the script to be precompiled only at first execution
+# speeding up later use.
+
+export PERL6LIB='.'  # path to FileChooser.pm6, to be adjusted
+perl6 -e 'use FileChooser' "$@"
+exitcode=$?
+[[ $exitcode == 130 ]] && kill -SIGINT $$
+exit $exitcode
