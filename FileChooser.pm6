@@ -428,7 +428,7 @@ class dirCache {
 					$_ = $name.substr($patLen);
 				}
 			}
-			return |@dirs, |@others;
+			return [|@dirs, |@others];
 		}
 	}
 }
