@@ -416,10 +416,10 @@ class dirCache {
 			my $bsFilter = &defaultBsFilter;
 			my $patLen = $pattern.chars;
 			$bsFilter = {compareFileNames $_.substr(0, $patLen), $pattern} if $pattern;
-			my @ret =
-				|bsgrep($bsFilter, $.files(:$sync)<namesDirs>),
-				|bsgrep($bsFilter, $.files(:$sync)<namesOthers>);
-			for @ret -> $name {
+			my @dirs   = |bsgrep($bsFilter, $.files(:$sync)<namesDirs>);
+			my @others = |bsgrep($bsFilter, $.files(:$sync)<namesOthers>);
+
+			for |(@dirs[0, *-1] if @dirs), |(@others[0, *-1] if @others) -> $name {
 				with $completion {
 					my $i=0;
 					$i++ while try $_.substr($i,1) eq $name.substr($i+$patLen,1);
@@ -428,7 +428,7 @@ class dirCache {
 					$_ = $name.substr($patLen);
 				}
 			}
-			return @ret;
+			return |@dirs, |@others;
 		}
 	}
 }
